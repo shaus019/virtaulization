@@ -6,6 +6,11 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
+  # This will be the name of the virtual machine, as it is used by vagrant
+  # for stdout and logs.
+  config.vm.define "web-server"
+  # This will be the host name of the guest virtual machine.
+  config.vm.hostname = "web-server"
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -57,6 +62,8 @@ Vagrant.configure("2") do |config|
   # The settings are configured in another block, with the block parameter
   # called vb, which we can use to ammend the seetings by setting properties of vb.
   config.vm.provider "virtualbox" do |vb|
+    # this line to setup the name of our virtual machine as it will appear in virtual box.
+    vb.name = "web-server"
   #   # Display the VirtualBox GUI when booting the machine
     vb.gui = true
   #

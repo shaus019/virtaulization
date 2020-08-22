@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # In my words: Here you can share folders between the host,
   # and guest vm. First path is on the host and the 2nd is guest vm.
-  config.vm.synced_folder "./html/", "/var/www/html/"
+  config.vm.synced_folder "/html/", "/var/www/html/"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -64,8 +64,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     # this line to setup the name of our virtual machine as it will appear in virtual box.
     vb.name = "web-server"
-  #   # Display the VirtualBox GUI when booting the machine
-    vb.gui = true
+  #   # Do (true) or don't(fasle) display the VirtualBox GUI when booting the machine
+    vb.gui = false
   #
   #   # Customize the amount of memory on the VM:
     vb.memory = "2048"
@@ -89,5 +89,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get install -y apache2
+  SHELL
+
+  config.vm.provision "shell", run: "always", inline: <<-SHELL
+  echo "hello fro the vagrant file"
   SHELL
 end

@@ -46,19 +46,23 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  # In my words: Here you can share folders between the host,
+  # and guest vm. First path is on the host and the 2nd is guest vm.
+  config.vm.synced_folder "./html/", "/var/www/html/"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
+  # In my words: Provider here is the VM software that we will use.
+  # The settings are configured in another block, with the block parameter
+  # called vb, which we can use to ammend the seetings by setting properties of vb.
+  config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
+    vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
+    vb.memory = "2048"
+ end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -66,8 +70,17 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+  # In my words: Provisioning is all about getting the software you need to
+  # run your application, including any dependencies onto your machine.
+  # You can use to provision vm using shell commands, docker, 
+  # puppet or any other tool which vagrant supports.
+  # Between the SHELL accurance you can use to define the commands that you want to execute'
+  # when your machine is being provisioned.
+  # First line in the SHELL document is to update the packages and
+  # the 2nd line is to install the apche webserver.
+  # -y here is important so ubantu can install the package without promting the user.
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get install -y apache2
+  SHELL
 end

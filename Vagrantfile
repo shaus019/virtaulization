@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
   # In my own words: Here it only allows the traffic from the host_ip address,
   # which is the loop back address also known as local host.
   # What it means that the only acess to the ports will be from local machine.
-    #config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    vm1.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -54,7 +54,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # In my words: Here you can share folders between the host,
   # and guest vm. First path is on the host and the 2nd is guest vm.
-    #vm1.vm.synced_folder "/html/", "/var/www/html/"
+    vm1.vm.synced_folder "./html/", "/var/www/html/"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.

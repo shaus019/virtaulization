@@ -1,0 +1,18 @@
+.heading{
+    width: 50%;
+    margin: 30px auto;
+    text-align: center;
+    color: #6B8E23;
+    background: #FF8DC;
+    border: 2px solid #6B8E23;
+    border-radius: 20px;
+}
+
+.form{
+    width: 50%;
+    margin: 30px auto;
+    border-radius: 5px;
+    padding: 10px;
+    background: #FF8DC;
+    border: 2px solid #6B8E23;
+}

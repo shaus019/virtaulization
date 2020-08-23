@@ -8,16 +8,17 @@
 Vagrant.configure("2") do |config|
   # This will be the name of the virtual machine, as it is used by vagrant
   # for stdout and logs.
-  config.vm.define "web-server" do |vm1|
+
+  config.vm.define "web-server-user" do |vm1|
   # This will be the host name of the guest virtual machine.
-    vm1.vm.hostname = "web-server"
+    vm1.vm.hostname = "web-server-user"
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-    vm1.vm.box = "ubuntu/xenial64"
+    vm1.vm.box = "ubuntu/bionic64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -63,12 +64,12 @@ Vagrant.configure("2") do |config|
   # called vb, which we can use to ammend the seetings by setting properties of vb.
     vm1.vm.provider "virtualbox" do |vb|
     # this line to setup the name of our virtual machine as it will appear in virtual box.
-        vb.name = "web-server"
+        vb.name = "web-server-user"
   #   # Do (true) or don't(fasle) display the VirtualBox GUI when booting the machine
         vb.gui = false
   #
   #   # Customize the amount of memory on the VM:
-        vb.memory = "1048"
+        vb.memory = "1024"
     end
   #
   # View the documentation for the provider you are using for more
@@ -96,9 +97,10 @@ Vagrant.configure("2") do |config|
     SHELL
    end
   # 2nd virtual machine settings. 
+  
   config.vm.define "db-server" do |vm2|
     vm2.vm.hostname = "db-server"
-    vm2.vm.box = "centos/7"
+    vm2.vm.box = "ubuntu/bionic64"
 
     vm2.vm.network "private_network", ip: "192.168.33.20"
 
@@ -107,7 +109,7 @@ Vagrant.configure("2") do |config|
     vm2.vm.provider "virtualbox" do |vb|
         vb.name = "db-server"
         vb.gui = false
-        vb.memory = "1048"
+        vb.memory = "1024"
     end
    # vm2.vm.provision "shell", inline: <<-SHELL
     #    apt-get update
@@ -116,6 +118,20 @@ Vagrant.configure("2") do |config|
 
     vm2.vm.provision "shell", run: "always", inline: <<-SHELL
     echo "hello fro the 2nd virtual machine"
+    SHELL
+   end
+
+   config.vm.define "web-server-admin" do |vm3|
+    vm3.vm.hostname = "web-server-admin"
+    vm3.vm.box = "ubuntu/bionic64"
+    vm3.vm.network "private_network", ip: "192.168.33.15"
+    vm3.vm.provider "virtualbox" do |vb|
+      vb.name = "web-server-admin"
+      vb.gui = false
+      vb.memory = "1024"
+    end
+    vm3.vm.provision "shell", run: "always", inline: <<-SHELL
+    echo "hello fro the first virtual machine."
     SHELL
    end
 end

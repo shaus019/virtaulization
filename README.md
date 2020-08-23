@@ -1,3 +1,3 @@
-Project Discription
-In this project,we will b usiing three vms to communicate with each other to
-provide the functionality of a To Do list for a user.
+# COSC349 Assignment 1
+
+This project is three Virtual Machines (that can communicate with each other) set up by vagrant that contain three seperate parts of a to-do list application.

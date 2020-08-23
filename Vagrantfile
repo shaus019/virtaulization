@@ -8,16 +8,16 @@
 Vagrant.configure("2") do |config|
   # This will be the name of the virtual machine, as it is used by vagrant
   # for stdout and logs.
-  config.vm.define "web-server"
+  config.vm.define "web-server" do |vm1|
   # This will be the host name of the guest virtual machine.
-  config.vm.hostname = "web-server"
+    vm1.vm.hostname = "web-server"
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/xenial64"
+    vm1.vm.box = "ubuntu/xenial64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -36,11 +36,11 @@ Vagrant.configure("2") do |config|
   # In my own words: Here it only allows the traffic from the host_ip address,
   # which is the loop back address also known as local host.
   # What it means that the only acess to the ports will be from local machine.
-  config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+    vm1.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # In my words: Here you can share folders between the host,
   # and guest vm. First path is on the host and the 2nd is guest vm.
-  config.vm.synced_folder "/html/", "/var/www/html/"
+    #vm1.vm.synced_folder "/html/", "/var/www/html/"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -61,15 +61,15 @@ Vagrant.configure("2") do |config|
   # In my words: Provider here is the VM software that we will use.
   # The settings are configured in another block, with the block parameter
   # called vb, which we can use to ammend the seetings by setting properties of vb.
-  config.vm.provider "virtualbox" do |vb|
+    vm1.vm.provider "virtualbox" do |vb|
     # this line to setup the name of our virtual machine as it will appear in virtual box.
-    vb.name = "web-server"
+        vb.name = "web-server"
   #   # Do (true) or don't(fasle) display the VirtualBox GUI when booting the machine
-    vb.gui = false
+        vb.gui = false
   #
   #   # Customize the amount of memory on the VM:
-    vb.memory = "2048"
- end
+        vb.memory = "1048"
+    end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -86,12 +86,36 @@ Vagrant.configure("2") do |config|
   # First line in the SHELL document is to update the packages and
   # the 2nd line is to install the apche webserver.
   # -y here is important so ubantu can install the package without promting the user.
-  config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
-    apt-get install -y apache2
-  SHELL
+    #vm1.vm.provision "shell", inline: <<-SHELL
+     #   apt-get update
+      #  apt-get install -y apache2
+    #SHELL
 
-  config.vm.provision "shell", run: "always", inline: <<-SHELL
-  echo "hello fro the vagrant file"
-  SHELL
+    vm1.vm.provision "shell", run: "always", inline: <<-SHELL
+    echo "hello fro the first virtual machine."
+    SHELL
+   end
+  # 2nd virtual machine settings. 
+  config.vm.define "db-server" do |vm2|
+    vm2.vm.hostname = "db-server"
+    vm2.vm.box = "centos/7"
+
+    vm2.vm.network "private_network", ip: "192.168.33.20"
+
+    #vm2.vm.synced_folder "/html/", "/var/www/html/"
+
+    vm2.vm.provider "virtualbox" do |vb|
+        vb.name = "db-server"
+        vb.gui = false
+        vb.memory = "1048"
+    end
+   # vm2.vm.provision "shell", inline: <<-SHELL
+    #    apt-get update
+     #   apt-get install -y apache2
+    #SHELL
+
+    vm2.vm.provision "shell", run: "always", inline: <<-SHELL
+    echo "hello fro the 2nd virtual machine"
+    SHELL
+   end
 end

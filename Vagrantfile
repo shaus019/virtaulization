@@ -92,10 +92,13 @@ Vagrant.configure("2") do |config|
       #  apt-get install -y apache2
     #SHELL
 
-    vm1.vm.provision "shell", run: "always", inline: <<-SHELL
-    echo "hello fro the first virtual machine."
+    vm1.vm.provision "shell", inline: <<-SHELL
+      echo "user web server has started"
+      apt-get update
+      apt-get install -y apache2
     SHELL
-   end
+  end
+
   # 2nd virtual machine settings. 
   
   config.vm.define "db-server" do |vm2|
@@ -111,14 +114,13 @@ Vagrant.configure("2") do |config|
         vb.gui = false
         vb.memory = "1024"
     end
-   # vm2.vm.provision "shell", inline: <<-SHELL
-    #    apt-get update
-     #   apt-get install -y apache2
-    #SHELL
-
-    vm2.vm.provision "shell", run: "always", inline: <<-SHELL
-    echo "hello fro the 2nd virtual machine"
+    
+    vm2.vm.provision "shell", inline: <<-SHELL
+      echo "database server has started"
+      apt-get update
+      apt-get install -y mysql-server
     SHELL
+
    end
 
    config.vm.define "web-server-admin" do |vm3|
@@ -130,8 +132,12 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       vb.memory = "1024"
     end
-    vm3.vm.provision "shell", run: "always", inline: <<-SHELL
-    echo "hello fro the first virtual machine."
+
+    vm3.vm.provision "shell", inline: <<-SHELL
+      echo "admin web server has started"
+      apt-get update
+      apt-get install -y apache2
     SHELL
+
    end
 end

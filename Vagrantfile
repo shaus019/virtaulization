@@ -1,141 +1,88 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
+# A Vagrantfile to set up three VMs, two webserver and a database server,
+# connected together using an internal network with manually-assigned
+# IP addresses for the VMs.
+
 Vagrant.configure("2") do |config|
-  # This will be the name of the virtual machine, as it is used by vagrant
-  # for stdout and logs.
 
-  config.vm.define "web-server-user" do |vm1|
+  #Use Ubuntu 20.04 LTS for all VM's
+  config.vm.box = "ubuntu/bionic64"
+
+  # 1st webserver VM name
+  config.vm.define "web-server-user" do |webserver_user|
+
   # This will be the host name of the guest virtual machine.
-    vm1.vm.hostname = "web-server-user"
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
+    webserver_user.vm.hostname = "web-server-user"
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://vagrantcloud.com/search.
-    vm1.vm.box = "ubuntu/bionic64"
+    #Foward port 80 to 8080 to loopback on host
+    webserver_user.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    webserver_user.vm.network "private_network", ip: "192.168.33.10"
 
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  # NOTE: This will enable public access to the opened port
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+    #Share HTML folder to first VM
+    webserver_user.vm.synced_folder "./public/user", "/var/www/html/"
 
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine and only allow access
-  # via 127.0.0.1 to disable public access
-  # In my own words: Here it only allows the traffic from the host_ip address,
-  # which is the loop back address also known as local host.
-  # What it means that the only acess to the ports will be from local machine.
-    vm1.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-
-  # Create a private network, which allows host-only access to the machine
-  # using a specific IP.
-    vm1.vm.network "private_network", ip: "192.168.33.10"
-
-  # Create a public network, which generally matched to bridged network.
-  # Bridged networks make the machine appear as another physical device on
-  # your network.
-  # config.vm.network "public_network"
-
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
-  # In my words: Here you can share folders between the host,
-  # and guest vm. First path is on the host and the 2nd is guest vm.
-    vm1.vm.synced_folder "./html/", "/var/www/html/"
-
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  # In my words: Provider here is the VM software that we will use.
-  # The settings are configured in another block, with the block parameter
-  # called vb, which we can use to ammend the seetings by setting properties of vb.
-    vm1.vm.provider "virtualbox" do |vb|
-    # this line to setup the name of our virtual machine as it will appear in virtual box.
+    #Use virtualbox as hypervisor
+    webserver_user.vm.provider "virtualbox" do |vb|
+    
+        # this line to setup the name of our virtual machine as it will appear in virtual box.
         vb.name = "web-server-user"
-  #   # Do (true) or don't(fasle) display the VirtualBox GUI when booting the machine
+        
+        # don't display the VirtualBox GUI when booting the machine
         vb.gui = false
-  #
-  #   # Customize the amount of memory on the VM:
+
+        # 1GB RAM
         vb.memory = "1024"
     end
-  #
-  # View the documentation for the provider you are using for more
-  # information on available options.
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  # In my words: Provisioning is all about getting the software you need to
-  # run your application, including any dependencies onto your machine.
-  # You can use to provision vm using shell commands, docker, 
-  # puppet or any other tool which vagrant supports.
-  # Between the SHELL accurance you can use to define the commands that you want to execute'
-  # when your machine is being provisioned.
-  # First line in the SHELL document is to update the packages and
-  # the 2nd line is to install the apche webserver.
-  # -y here is important so ubantu can install the package without promting the user.
-    #vm1.vm.provision "shell", inline: <<-SHELL
-     #   apt-get update
-      #  apt-get install -y apache2
-    #SHELL
-
-    vm1.vm.provision "shell", inline: <<-SHELL
+    # Shell script to update packages and install webserver
+    webserver_user.vm.provision "shell", inline: <<-SHELL
       echo "user web server has started"
-      apt-get update
+      apt-get update && apt full-upgrade -y
       apt-get install -y apache2
     SHELL
   end
 
-  # 2nd virtual machine settings. 
-  
-  config.vm.define "db-server" do |vm2|
-    vm2.vm.hostname = "db-server"
-    vm2.vm.box = "ubuntu/bionic64"
+  # 2nd virtual machine 
+  config.vm.define "db-server" do |dbserver|
+    dbserver.vm.hostname = "db-server"
 
-    vm2.vm.network "private_network", ip: "192.168.33.20"
+    dbserver.vm.network "private_network", ip: "192.168.33.20"
 
-    #vm2.vm.synced_folder "/html/", "/var/www/html/"
-
-    vm2.vm.provider "virtualbox" do |vb|
+    dbserver.vm.provider "virtualbox" do |vb|
         vb.name = "db-server"
         vb.gui = false
         vb.memory = "1024"
     end
     
-    vm2.vm.provision "shell", inline: <<-SHELL
+    dbserver.vm.provision "shell", inline: <<-SHELL
       echo "database server has started"
-      apt-get update
+      apt-get update && apt full-upgrade -y
       apt-get install -y mysql-server
     SHELL
 
    end
 
-   config.vm.define "web-server-admin" do |vm3|
-    vm3.vm.hostname = "web-server-admin"
-    vm3.vm.box = "ubuntu/bionic64"
-    vm3.vm.network "private_network", ip: "192.168.33.15"
-    vm3.vm.provider "virtualbox" do |vb|
+  config.vm.define "web-server-admin" do |webserver_admin|
+    webserver_admin.vm.hostname = "web-server-admin"
+    webserver_admin.vm.network "private_network", ip: "192.168.33.15"
+    
+    #Share HTML folder to first VM
+    webserver_user.vm.synced_folder "./public/user", "/var/www/html/"
+
+    webserver_admin.vm.provider "virtualbox" do |vb|
       vb.name = "web-server-admin"
       vb.gui = false
       vb.memory = "1024"
     end
 
-    vm3.vm.provision "shell", inline: <<-SHELL
+    webserver_admin.vm.provision "shell", inline: <<-SHELL
       echo "admin web server has started"
-      apt-get update
+      apt-get update && apt full-upgrade -y
       apt-get install -y apache2
     SHELL
 

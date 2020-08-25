@@ -1,24 +1,20 @@
-DROP TABLE UserTable;
-DROP TABLE TaskList;
-CREATE TABLE UserTable (
-    userName VARCHAR2(7),
-    toDo_Id int,
-    PRIMARY KEY (userName),
-
+CREATE TABLE todo_list (
+    user_id int PRIMARY KEY,
+    username varchar(7) UNIQUE NOT NULL
 );
 
-CREATE TABLE TaskList(
-    task_Name VARCHAR2(50),
-    task_Details VARCHAr2(150),
-    toDo_Id int,
-    FOREIGN KEY (toDo_Id) REFRENCES UserTable(toDo_Id);
+CREATE TABLE todo_item (
+    task_name varchar(50) PRIMARY KEY,
+    task_details varchar(150),
+    list_id int,
+    
+    FOREIGN KEY (list_id) REFERENCES todo_list(user_id)
+);
 
-INSERT INTO UserTable VALUES ('jhon1',1);
-INSERT INTO UserTable VALUES ('pheboe1',2);
-
-
-
-INSERT INTO TaskList VALUES ('Meeting','Got a meeting somewhere', 2);
-INSERT INTO TaskList VALUES ('swimming','Stay healthy',1);
+INSERT INTO todo_list(username, user_id) VALUES ('john', 1);
+INSERT INTO todo_list(username, user_id)  VALUES ('pheboe1', 2);
 
 
+
+INSERT INTO todo_item(task_name, task_details, list_id) VALUES ('Meeting','Got a meeting somewhere', 1);
+INSERT INTO todo_item(task_name, task_details, list_id) VALUES ('swimming','Stay healthy', 2);

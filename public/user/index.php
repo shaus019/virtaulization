@@ -40,11 +40,11 @@ echo "</table>";
 <!DOCTYPE html>
 <html>
 	<head>
-		<title> To do list app </title>
+		<title> Todo list user portal </title>
 	</head>
     <body>
         <div class="heading">
-        <h2>This is an app for to do list.</h2>
+        <h2>User portal</h2>
         </div>
 
         <form method = "POST" action="index.php">

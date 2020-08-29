@@ -7,10 +7,10 @@ This project is three Virtual Machines (that can communicate with each other) se
 Prerequistes: VirtualBox, Vagrant
 
 clone repository, open a shell at the location of the repository and run:
-<pre> vagrant up      #Starts virtual machines</pre>
+<pre> vagrant up      # Starts virtual machines</pre>
 <br>
 Then open in web-browser
-
-<pre> http://localhost:8080      //User portal</pre>
-<pre> http://localhost:8081      //Administrator portal</pre>
+<code> http://localhost:8080</code>  User portal
+<br>
+<code> http://localhost:8081</code>  Administrator portal
 

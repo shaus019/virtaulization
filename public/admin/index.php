@@ -2,18 +2,20 @@
 <html>
 
 <head>
-    <title> To do list app </title>
+    <title> To-do list admin portal </title>
 </head>
 
 <body>
     <div class="heading">
-        <h2>This is an app for to do list.</h2>
+        <h2>Todo list</h2>
     </div>
 
     <form method="POST" action="index.php">
-        <input type="text" name="task" class="task_input">
-        <button type="submit" class="task_btn" name="submit"> Edit Task </button>
+        <input type = "text" name = "task-id" class = "task_input" placeholder="ID">
+        <input type = "text" name = "task" class = "task_input" placeholder="Task">
+        <button type = "submit" class = "task_btn" name = "submit"> Edit Task </button>
     </form>
+    <br>
 
     <?php
     //connect to the databse
@@ -30,44 +32,67 @@
 
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
     // delete task
     if (isset($_GET['del_task'])) {
+
         $id = $_GET['del_task'];
 
-        $conn->query("DELETE FROM todo_list WHERE id=" . $id);
+        $conn-> exec("DELETE FROM todo_list WHERE id=" . $id);
         header('location: index.php');
+    }
+
+    if(isset($_POST['submit'])){
+
+        if(empty($_POST['task']) || empty($_POST['task-id'])){
+          $errors = "you must fill in the task and/or ID";
+       
+        }else{    
+            $task = $_POST['task'];
+            $id = $_POST['task-id'];
+
+            $up = $conn-> prepare("UPDATE todo_list SET task=\"$task\" WHERE id=$id");
+            $up -> execute();
+            echo $up -> rowCount();
+            header('location: index.php');
+      }
     }
     //retrive the data(tasks) from the databse and put in a table.
     $q = $conn->query("SELECT * FROM todo_list");
+
     ?>
+
+    <br>
     <table border>
         <thead>
             <tr>
                 <th>ID</th>
                 <th style="width: 80px;">Task</th>
-                <th style="width: 20px;">Delete</th>
+                <th>Delete</th>
             </tr>
         </thead>
 
         <tbody>
+
             <?php
             // select all tasks if page is visited or refreshed
             $q = $conn->query("SELECT * FROM todo_list");
 
-            $i = 1;
-            while ($row = $q->fetch()) { ?>
+            while ($row = $q->fetch()) { 
+            ?>
                 <tr>
-                    <td> <?php echo $i; ?> </td>
+                    <td> <?php echo $row['id']; ?> </td>
                     <td class="task"> <?php echo $row['task']; ?> </td>
                     <td class="delete">
                         <a href="index.php?del_task=<?php echo $row['id'] ?>">x</a>
                     </td>
                 </tr>
-            <?php $i++;
-            } ?>
+
+            <?php } ?>
+
         </tbody>
     </table>
 </body>

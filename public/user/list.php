@@ -39,12 +39,17 @@
             echo "Connection failed: " . $e->getMessage();
         }
 
-        $user_id = $conn -> query("SELECT user_id FROM todo_list") -> fetch()[0];
-        print_r($conn -> query("SELECT * FROM todo_list") -> fetch());
+        $user_id = $conn -> query("SELECT user_id FROM todo_list WHERE todo_list.username = \"" . $username . "\"") -> fetch()[0];
+        print_r($user_id);
+        print_r($task_name);
+        print_r($task_detail);
 
         if(isset($task_name) && isset($task_detail)) {
-            $conn -> query("INSERT INTO task_item (task_name, task_detail, list_id) VALUE (" . $task_name . ", "
+            print_r("true");
+            $add = $conn -> query("INSERT INTO todo_item (task_name, task_detail, list_id) VALUES (" . $task_name . ", "
                 . $task_detail . ", " . $user_id . ")");
+        } else {
+            print_r("false");
         }
 
         $q = $conn->query("SELECT * FROM todo_item INNER JOIN todo_list ON todo_list.user_id = todo_item.list_id 

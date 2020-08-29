@@ -24,8 +24,8 @@
     $db_name   = 'todo';
     $db_user   = 'webuser';
     $db_passwd = 'insecure_db_pw';
-
     $pdo_dsn = "mysql:host=$db_host;dbname=$db_name";
+
     //initialize the error variable
     $errors = "";
     try {
@@ -37,17 +37,20 @@
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
+    
     // delete task
     if (isset($_GET['del_task'])) {
 
         $id = $_GET['del_task'];
 
+        //send delete request and reload page
         $conn-> exec("DELETE FROM todo_list WHERE id=" . $id);
         header('location: index.php');
     }
 
     if(isset($_POST['submit'])){
 
+        //is edited task name non-existant
         if(empty($_POST['task']) || empty($_POST['task-id'])){
           $errors = "you must fill in the task and/or ID";
        
@@ -55,12 +58,13 @@
             $task = $_POST['task'];
             $id = $_POST['task-id'];
 
+            //update task and reload page
             $up = $conn-> prepare("UPDATE todo_list SET task=\"$task\" WHERE id=$id");
             $up -> execute();
-            echo $up -> rowCount();
             header('location: index.php');
       }
     }
+    
     //retrive the data(tasks) from the databse and put in a table.
     $q = $conn->query("SELECT * FROM todo_list");
 
@@ -79,7 +83,7 @@
         <tbody>
 
             <?php
-            // select all tasks if page is visited or refreshed
+            // print all tasks
             $q = $conn->query("SELECT * FROM todo_list");
 
             while ($row = $q->fetch()) { 

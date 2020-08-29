@@ -42,11 +42,14 @@
   //insert a task, when submit button is clicked, and show an error if nothing has entered.
   if (isset($_POST['submit'])) {
 
+    //is the added task empty?
     if (empty($_POST['task'])) {
       $errors = "you must fill in the task";
 
     } else {
       $task = $_POST['task'];
+
+      //add task and reload page
       $conn->query("INSERT INTO todo_list (task) VALUES ('$task')");
       header('location: index.php');
     }
@@ -54,6 +57,7 @@
   //retrive the data(tasks) from the databse and put in a table.
   $q = $conn->query("SELECT * FROM todo_list");
 
+  //print table of all tasks
   echo "<br><table border><thead><tr><th>
     ID</th><th style=\"width: 80px;\">
     Task</th></tr></thead>";

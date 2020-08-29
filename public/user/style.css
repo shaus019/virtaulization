@@ -8,11 +8,15 @@
     border-radius: 20px;
 }
 
-.form{
+form{
     width: 50%;
     margin: 30px auto;
     border-radius: 5px;
     padding: 10px;
     background: #FF8DC;
     border: 2px solid #6B8E23;
+}
+form p {
+    color:red;
+    margin: 0px;
 }

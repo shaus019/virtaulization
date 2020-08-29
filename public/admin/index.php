@@ -2,7 +2,8 @@
 <html>
 
 <head>
-    <title> To-do list admin portal </title>
+<title> Todo list admin portal </title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
@@ -10,7 +11,7 @@
         <h2>Todo list</h2>
     </div>
 
-    <form method="POST" action="index.php">
+    <form class="form" method="POST" action="index.php">
         <input type = "text" name = "task-id" class = "task_input" placeholder="ID">
         <input type = "text" name = "task" class = "task_input" placeholder="Task">
         <button type = "submit" class = "task_btn" name = "submit"> Edit Task </button>

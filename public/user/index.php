@@ -44,7 +44,7 @@ echo "</table>";
 	</head>
     <body>
         <div class="heading">
-        <h2>User portal</h2>
+        <h2>My Todo list</h2>
         </div>
 
         <form method = "POST" action="index.php">

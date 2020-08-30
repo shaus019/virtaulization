@@ -58,9 +58,7 @@
   $q = $conn->query("SELECT * FROM todo_list");
 
   //print table of all tasks
-  echo "<br><table border><thead><tr><th>
-    ID</th><th style=\"width: 80px;\">
-    Task</th></tr></thead>";
+  echo "<br><table border>";
 
   while ($row = $q->fetch()) {
     echo "<tr><td>" . $row["id"] . "</td><td>" . $row["task"] . "</td></tr>\n";

@@ -33,7 +33,9 @@
       header('location: index.php');
     }
   }
-  ?>
+
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -54,18 +56,28 @@
     <input type="text" name="task" class="task_input">
     <button type="submit" class="task_btn" name="submit"> Add Task </button>
   </form>
-  <?php
-  //retrive the data(tasks) from the databse and put in a table.
-  $q = $conn->query("SELECT * FROM todo_list");
 
-  //print table of all tasks
- echo "<br><table border>";
+  <table>
+	<thead>
+		<tr>
+			<th>N</th>
+			<th>Tasks</th>
+		</tr>
+	</thead>
 
-  while ($row = $q->fetch()) {
-    echo "<tr><td>" . $row["id"] . "</td><td>" . $row["task"] . "</td></tr>\n";
-  }
-  echo "</table>";
-  ?>
+	<tbody>
+		<?php 
+		// select all tasks if page is visited or refreshed
+		$q = $conn->query("SELECT * FROM todo_list");
+
+		$i = 1; while ($row = $q->fetch()) { ?>
+			<tr>
+				<td> <?php echo $i; ?> </td>
+				<td class="task"> <?php echo $row['task']; ?> </td>
+			</tr>
+		<?php $i++; } ?>	
+	</tbody>
+</table>
  
 </body>
 

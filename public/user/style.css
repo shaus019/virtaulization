@@ -5,7 +5,7 @@ table, input, button {
 
 .heading{
     width: 50%;
-    background: #FFF8DC;
+    background: #e0b60a;
     margin: 30px auto;
     text-align: center;
     color: #6B8E23;
@@ -15,11 +15,11 @@ table, input, button {
 
 form{
     width: 50%;
-    background: #FFF8DC;
+    background: #e0b60f;
     margin: 30px auto;
     border-radius: 5px;
     padding: 10px;
-    border: 2px solid #6B8E23;
+    border: 2px solid #91d803;
 }
 
 form p {
@@ -32,12 +32,39 @@ form p {
 	padding: 10px;
     border: 2px solid #6B8E23;
 }
+table {
+    width: 50%;
+    margin: 30px auto;
+    border-collapse: collapse;
+}
+
+tr {
+	border-bottom: 1px solid #cbcbcb;
+}
+
+th {
+	font-size: 19px;
+	color: #6B8E23;
+}
+
+th, td{
+	border: none;
+    height: 30px;
+    padding: 2px;
+}
 
 .task_btn {
 	height: 39px;
-	background: #FFF8DC;
-	color: 	#6B8E23;
-	border: 2px solid #6B8E23;
+	background: #046380;
+	color: 	#d7dbcd;
+	border: 2px solid #a7fa02;
 	border-radius: 5px; 
 	padding: 5px 20px;
+}
+
+tr:hover {
+	background: #45cf68;
+}
+.task {
+	text-align: left;
 }
